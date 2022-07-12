@@ -45,3 +45,14 @@ const leeArr = [10, 100, 1000, 10000];
 
 leeArr.length = 2;
 console.log(leeArr);
+
+// 6. Mandatory Parameter
+function foo(bar) {
+  if (bar === undefined) throw new Error("Missing Parameter!");
+  return bar;
+}
+// ->
+const mandatory = () => {
+  throw new Error("Missing Parameter!");
+};
+const foo2 = (bar = mandatory()) => bar;
