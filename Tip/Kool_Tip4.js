@@ -21,3 +21,10 @@ const letters = Array.from({ length: 26 }, (_, i) =>
   String.fromCharCode(97 + i)
 );
 console.log([...letters].sort(() => Math.random() - 0.5));
+
+// 4. Find Intersection
+const fruitsA = ["🍎", "🍌", "🍒"];
+const fruitsB = ["🍒", "🍆", "🍉", "🍌"];
+
+const intersection = fruitsA.filter((fruit) => fruitsB.includes(fruit));
+console.log(intersection); // ["🍌", "🍒"]
