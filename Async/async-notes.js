@@ -1,51 +1,61 @@
-import fetch from "node-fetch";
+// @ts-check
 // npm install node-fetch
+import fetch from "node-fetch";
 
-async function getTodo(todoId) {
+/**
+ * getData
+ * @param {"users"|"todos"|"albums"} resource
+ * @param {number} id
+ * @returns {Promise} jsonData
+ */
+async function getData(resource, id) {
   try {
-    const todoRes = await fetch(
-      `https://jsonplaceholder.typicode.com/todos/${todoId}`
+    const res = await fetch(
+      `https://jsonplaceholder.typicode.com/${resource}/${id}`
     );
-    const todo = await todoRes.json();
-    return todo;
+    const data = await res.json();
+    return data;
   } catch (err) {
-    console.err(err);
-  }
-}
-
-async function getUser(userId) {
-  try {
-    const userRes = await fetch(
-      `https://jsonplaceholder.typicode.com/users/${userId}`
-    );
-    const user = await userRes.json();
-    return user;
-  } catch (err) {
-    console.err(err);
-  }
-}
-
-async function getAlbum(albumId) {
-  try {
-    const albumRes = await fetch(
-      `https://jsonplaceholder.typicode.com/albums/${albumId}`
-    );
-    const album = await albumRes.json();
-    return album;
-  } catch (err) {
-    console.err(err);
+    console.error(err);
   }
 }
 
 // data reference -> data reference
 (async function () {
-  console.time("timer");
+  console.time("timer1");
 
-  const todo = await getTodo(50);
+  const todo = await getData("todos", 50);
   const userId = todo?.userId;
-  getUser(userId)
+  getData("users", userId)
     .then((user) => console.log(user))
-    .catch((err) => console.err(err));
+    .catch((err) => console.error(err));
 
-  console.timeEnd("timer");
+  console.timeEnd("timer1");
+})();
+
+// Not good Code...
+(async function () {
+  console.time("timer2");
+
+  try {
+    const todo = await getData("todos", 20);
+    const album = await getData("albums", 30);
+
+    console.log([todo, album]);
+  } catch (err) {
+    console.error(err);
+  }
+
+  console.timeEnd("timer2");
+})();
+
+// Good Code! asynchronously
+(async function () {
+  console.time("timer3");
+
+  await Promise.all([getData("todos", 30), getData("albums", 20)])
+    .then((res) => console.log(res))
+    .catch((err) => console.error(err));
+
+  console.timeEnd("timer3");
 })();
